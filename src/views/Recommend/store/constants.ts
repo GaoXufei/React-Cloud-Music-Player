@@ -1,0 +1,1 @@
+export const CHANG_BANNER = 'home/recommend/CHANG_BANNER';
