@@ -1,45 +1,35 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  position: fixed;
-  width: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 100;
-  transform-origin: right bottom;
-  overflow: hidden;
-  background: #f1f1f1;
-
-  &.fly-enter, &.fly-appear{
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
-  &.fly-enter-active, &.fly-appear-active{
-    opacity: 1;
-    transition: all .3s;
-    transform: translate3d(0, 0, 0);
-  }
-  &.fly-exit{
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-  &.fly-exit-active{
-    opacity: 0;
-    transition: all .3s;
-    transform: translate3d(100%, 0, 0);
-  }
-`;
+import { Container, SearchContainer, ContentContainer } from './style'
+import SearchComponent from '@/ui/search'
+import { getHotKeyWords } from './store/actionCreators'
 
 function Search(props: any) {
+  // 控制搜索页路由显示与否
   const [show, setShow] = useState(false);
-
+  // 获取输入框内容
+  const [query, setQuery] = useState('');
+  // 获取mapState
+  const { hotList } = props;
+  // 获取mapDispatch
+  const { getHotKeyWordsDispatch } = props;
   useEffect(() => {
+    if (!hotList.length) {
+      getHotKeyWordsDispatch()
+    }
     setShow(true);
   }, [])
+
+  function handleBack() {
+    setShow(false)
+  }
+
+  function handleQuery(q: string) {
+    setQuery(q);
+    if (!q) return;
+    console.log(q)
+  }
 
   return (
     <CSSTransition
@@ -51,12 +41,23 @@ function Search(props: any) {
       onExited={() => props.history.goBack()}
     >
       <Container>
-        <button onClick={() => setShow(false)}>返回</button>
-        <h1>Search</h1>
+        <SearchContainer>
+          <SearchComponent handleBack={handleBack} handleQuery={handleQuery} />
+        </SearchContainer>
+        <ContentContainer>{query}</ContentContainer>
       </Container>
     </CSSTransition>
   )
 }
 
+const mapStateToProps = (state: any) => ({
+  hotList: state.getIn(['search', 'hotList'])
+})
 
-export default Search;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    getHotKeyWordsDispatch: () => dispatch(getHotKeyWords())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Search));

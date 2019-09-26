@@ -1,0 +1,44 @@
+{
+  "id": "1422662",
+  "name": "ReactMusic",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1333637",
+      "name": "取消",
+      "font_class": "quxiao",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "5387521",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "eaf1",
+      "unicode_decimal": 60145
+    },
+    {
+      "icon_id": "7961828",
+      "name": "返回",
+      "font_class": "fanhui",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "8440648",
+      "name": "search",
+      "font_class": "zhenhuichongtubiaozhizuo-kuozhan-",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "10809845",
+      "name": "耳机  语音",
+      "font_class": "changyongtubiao-xianxingdaochu-zhuanqu-",
+      "unicode": "e73d",
+      "unicode_decimal": 59197
+    }
+  ]
+}

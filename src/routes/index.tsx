@@ -30,6 +30,24 @@ const Search = (props: any) => {
   );
 };
 
+const SingersComponent = lazy(() => import("../views/Singers"));
+const Singers = (props: any) => {
+  return (
+    <Suspense fallback={null}>
+      <SingersComponent {...props} />
+    </Suspense>
+  )
+}
+
+const RankComponent = lazy(() => import("../views/Rank"));
+const Rank = (props: any) => {
+  return (
+    <Suspense fallback={null}>
+      <RankComponent {...props} />
+    </Suspense>
+  );
+}
+
 export default [
   {
     path: '/',
@@ -42,9 +60,21 @@ export default [
       },
       {
         path: '/recommend',
-        extra: true,
+        exact: true,
         key: 'home',
         component: Recommend
+      },
+      {
+        path: '/singers',
+        exact: true,
+        key: 'singers',
+        component: Singers
+      },
+      {
+        path: '/rank',
+        exact: true,
+        key: 'rank',
+        component: Rank
       },
       {
         path: '/search',
