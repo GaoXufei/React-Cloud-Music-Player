@@ -14,6 +14,7 @@ function Search(props: any) {
   const { hotList } = props;
   // 获取mapDispatch
   const { getHotKeyWordsDispatch } = props;
+
   useEffect(() => {
     if (!hotList.length) {
       getHotKeyWordsDispatch()
@@ -31,6 +32,9 @@ function Search(props: any) {
     console.log(q)
   }
 
+  const data_hot_list = hotList ? hotList.toJS() : [];
+
+
   return (
     <CSSTransition
       in={show}
@@ -44,10 +48,22 @@ function Search(props: any) {
         <SearchContainer>
           <SearchComponent handleBack={handleBack} handleQuery={handleQuery} />
         </SearchContainer>
-        <ContentContainer>{query}</ContentContainer>
+        <ContentContainer>
+          <HotListComponent list={data_hot_list} />
+        </ContentContainer>
       </Container>
     </CSSTransition>
   )
+}
+
+const HotListComponent = ({ list }: { list: [{ first: string }] }) => {
+  return (
+    <div>
+      {
+        list.map((item: any) => (<div key={item.first}>{item.first}</div>))
+      }
+    </div>
+  );
 }
 
 const mapStateToProps = (state: any) => ({

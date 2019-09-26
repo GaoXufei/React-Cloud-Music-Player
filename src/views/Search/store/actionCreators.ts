@@ -2,7 +2,7 @@ import { SET_HOT_KEYWORDS, SET_SUGGEST_LIST } from './constants'
 import { fromJS } from 'immutable'
 import { getHotKeyWordsRequest, getSuggestListRequest } from '@/api/request'
 
-const changeHotKey = (data: any) => ({
+const changeHotKeyWords = (data: any) => ({
   type: SET_HOT_KEYWORDS,
   data: fromJS(data)
 });
@@ -17,7 +17,7 @@ export const getHotKeyWords = () => {
     try {
       const { result }: any = await getHotKeyWordsRequest();
       const { hots }: any = result;
-      dispatch(changeHotKey(hots))
+      dispatch(changeHotKeyWords(hots))
     } catch (e) {
       console.log(e)
     }
