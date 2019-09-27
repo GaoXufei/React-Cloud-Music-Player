@@ -45,3 +45,33 @@ export const ContentContainer = styled.div`
   height: 100%;
 `;
 
+export const HotWords = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;
+
+export const HotWordsTitle = styled.div`
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #666;
+`;
+
+export const HotWordsList = styled.ul`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: -15px;
+`;
+
+export const HotWordsItem = styled.li`
+  margin-top: 15px;
+  margin-left: 20px;
+  padding: 5px;
+  background: #fff;
+  font-size: 12px;
+`;
+
+
+
