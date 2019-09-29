@@ -4,7 +4,8 @@ import { fromJS } from 'immutable'
 const defaultState = fromJS({
   hotList: [],
   suggestList: [],
-  songsList: []
+  songsList: [],
+  enterLoading: false
 });
 
 export default (state: any = defaultState, action: any) => {
@@ -15,6 +16,8 @@ export default (state: any = defaultState, action: any) => {
       return state.set('suggestList', action.data);
     case actionTypes.SET_RESULT_SONGS_LIST:
       return state.set('songsList', action.data)
+    case actionTypes.SET_ENTER_LOADING:
+      return state.set('enterLoading', action.data)
     default:
       return state;
   }

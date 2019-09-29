@@ -34,17 +34,25 @@ export const Container = styled.div`
   }
 `;
 
+/**
+ * 搜索外层容器
+ */
 export const SearchContainer = styled.div`
   width: 100%;
   height: 40px;
   margin-top: -40px;
 `;
-
+/**
+ * 搜索结果外层容器
+ */
 export const ContentContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
 
+/**
+ * 热门搜索
+ */
 export const HotWords = styled.div`
   width: 100%;
   overflow: hidden;
@@ -72,6 +80,7 @@ export const HotWordsItem = styled.li`
   background: #fff;
   font-size: 12px;
 `;
+
 
 
 

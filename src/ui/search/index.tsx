@@ -30,7 +30,9 @@ const InputComponent = (props: any) => {
   }, [query])
 
   useEffect(() => {
-    if (newQuery !== query) setQuery(newQuery)
+    if (newQuery !== query) {
+      setQuery(newQuery)
+    }
     // eslint-disable-next-line
   }, [newQuery])
 

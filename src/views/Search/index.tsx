@@ -1,19 +1,25 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
 import {
+  /* 容器 */
   Container,
   SearchContainer,
   ContentContainer,
+  /* 热门搜索 */
   HotWords,
   HotWordsList,
   HotWordsItem,
-  HotWordsTitle
+  HotWordsTitle,
 } from './style'
+import { List as SingerList } from '@/components/singer'
 import SearchComponent from '@/ui/search'
+import { Loading } from '@/ui/transitions'
+import Scroll from '@/ui/scroll'
 import {
   getHotKeyWords,
-  getSuggestList
+  getSuggestList,
+  changeEnterLoading
 } from './store/actionCreators'
 
 
@@ -26,23 +32,41 @@ function Search(props: any) {
   const {
     hotList,
     suggestList,
-    songsList
+    songsList,
+    enterLoading
   } = props;
   // 获取mapDispatch
-  const { getHotKeyWordsDispatch, getSuggestListDispatch } = props;
+  const {
+    getHotKeyWordsDispatch,
+    getSuggestListDispatch,
+    changeEnterLoadingDispatch
+  } = props;
 
-  // 默认开启当前路由
-  useEffect(() => {
-    setShow(true);
-  }, [])
+  // 热门搜索
+  const [DATA_HOT_LIST, DATA_SET_HOT_LIST] = useState<any>([])
+  // 相关歌手 相关歌单
+  const [DATA_SONGS, DATA_SET_SONGS] = useState([]);
+  // 相关歌曲
+  const [DATA_SUGGEST, DATA_SET_SUGGEST] = useState({});
 
   // 请求热门关键字接口
   useEffect(() => {
-    if (!hotList.size) {
-      getHotKeyWordsDispatch()
-    }
+    // 显示当前页面
+    setShow(true);
+    // 如果size为0时 请求热门搜索数据
+    (!hotList.size) && getHotKeyWordsDispatch();
+    // 如果size大于0时 将热门搜索数据写入useState
+    (hotList.size) && DATA_SET_HOT_LIST(hotList.toJS())
     // eslint-disable-next-line
   }, [hotList])
+
+  useEffect(() => {
+    songsList.size && DATA_SET_SONGS(songsList.toJS())
+  }, [songsList])
+
+  useEffect(() => {
+    suggestList.size && DATA_SET_SUGGEST(suggestList.toJS())
+  }, [suggestList])
 
   // 关闭当前路由
   function handleBack() {
@@ -50,20 +74,22 @@ function Search(props: any) {
   }
   // 获取输入关键字
   function handleQuery(q: string) {
+    // 输入关键字
     setQuery(q);
+    // 清空数据 防止多次渲染
+    DATA_SET_SONGS([]);
+    DATA_SET_SUGGEST({});
     if (!q) return;
+    // 改变loading动画 -> 开
+    changeEnterLoadingDispatch(true);
+    // 如果不为空的情况下请求数据
     getSuggestListDispatch(q);
   }
   // 点击获取热门关键字
   function handleNewQuery(q: string) {
     setQuery(q);
   }
-  // 热门搜索数据
-  const data_hot_list = hotList.toJS();
-  // 相关歌手 相关歌单
-  const data_suggest_list = suggestList.toJS();
-  // 相关歌曲
-  const data_songs_list = songsList.toJS();
+
 
   return (
     <CSSTransition
@@ -80,19 +106,51 @@ function Search(props: any) {
         </SearchContainer>
         <ContentContainer>
           {/* 如果搜索关键字为空则显示热门关键字 */}
-          {!query && <HotListComponent handleNewQuery={handleNewQuery} list={data_hot_list} />}
-          {query && <SearchContentComponent data={1} />}
+          {!query && <HotListComponent handleNewQuery={handleNewQuery} list={DATA_HOT_LIST} />}
+          {
+            query
+            &&
+            DATA_SONGS.length > 0
+            &&
+            Object.keys(DATA_SUGGEST).length > 0
+            &&
+            <SearchContentComponent dataSuggestList={DATA_SUGGEST} dataSongsList={DATA_SONGS} />
+          }
+          {/* loading 动画 */}
+          {enterLoading ? <Loading /> : null}
         </ContentContainer>
       </Container>
     </CSSTransition>
   )
 }
 
-const SearchContentComponent = ({ data }: any) => useMemo(() => {
+/**
+ * 搜索主要内容
+ */
+const SearchContentComponent = ({ dataSuggestList, dataSongsList }: any) => {
+  const { artists } = dataSuggestList;
   return (
-    <div>{data}</div>
+    <Scroll>
+      <div>
+        <RenderSingers singerList={artists} />
+        {
+          dataSongsList.map((item: any) => (<div key={item.id}>{item.name}</div>))
+        }
+      </div>
+    </Scroll>
   )
-}, [data])
+}
+
+const RenderSingers = ({ singerList }: any) => {
+  if (!singerList.length) return null;
+  return (
+    <SingerList list={singerList} title={`相关歌手`} />
+  );
+}
+
+
+
+
 
 /**
  * 热门搜索
@@ -100,12 +158,12 @@ const SearchContentComponent = ({ data }: any) => useMemo(() => {
  * @param handleNewQuery { Function } 获取选择的关键字
  */
 const HotListComponent = ({ list, handleNewQuery }: { list: [{ first: string }], handleNewQuery: any }) => {
-  const item = list.map((item: any) => (<HotWordsItem onClick={() => handleNewQuery(item.first)} key={item.first}>{item.first}</HotWordsItem>));
+  const items = list.map((item: any) => (<HotWordsItem onClick={() => handleNewQuery(item.first)} key={item.first}>{item.first}</HotWordsItem>));
   return (
     <HotWords>
       <HotWordsTitle>{`热门搜索`}</HotWordsTitle>
       <HotWordsList>
-        {item}
+        {items}
       </HotWordsList>
     </HotWords>
   );
@@ -114,13 +172,15 @@ const HotListComponent = ({ list, handleNewQuery }: { list: [{ first: string }],
 const mapStateToProps = (state: any) => ({
   hotList: state.getIn(['search', 'hotList']),
   suggestList: state.getIn(['search', 'suggestList']),
-  songsList: state.getIn(['search', 'songsList'])
+  songsList: state.getIn(['search', 'songsList']),
+  enterLoading: state.getIn(['search', 'enterLoading'])
 })
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     getHotKeyWordsDispatch: () => dispatch(getHotKeyWords()),
-    getSuggestListDispatch: (q: string) => dispatch(getSuggestList(q))
+    getSuggestListDispatch: (q: string) => dispatch(getSuggestList(q)),
+    changeEnterLoadingDispatch: (bool: boolean) => dispatch(changeEnterLoading(bool))
   }
 }
 
