@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { View, List, ListItem, Title, ImageWrapper, Text } from './style'
 import { digitalAbbreviation } from '@/utils'
+import LazyLoad from 'react-lazyload'
 
 export const RecommendList = (props: any) => useMemo(() => {
   const { list, title } = props;
@@ -12,7 +13,9 @@ export const RecommendList = (props: any) => useMemo(() => {
           list.map((item: any) =>
             (<ListItem key={item.name}>
               <ImageWrapper>
-                <img src={item.picUrl} alt="" />
+                <LazyLoad placeholder={<img src={require('@/assets/music.png')} alt="" />}>
+                  <img src={item.picUrl} alt="" />
+                </LazyLoad>
                 <p>
                   <i className="iconfont">&#xe73d;</i>
                   {digitalAbbreviation(item.playCount, 'w')}

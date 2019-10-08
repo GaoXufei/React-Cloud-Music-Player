@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
+import { forceCheck } from 'react-lazyload'
+import { getNameString } from '@/utils'
 import {
   /* 容器 */
   Container,
@@ -12,7 +14,8 @@ import {
   HotWordsItem,
   HotWordsTitle,
 } from './style'
-import { List as SingerList } from '@/components/singer'
+import { ComponentSingerList, ComponentAlbumList } from '@/components/singer'
+import { SongsList } from '@/views/Album/style'
 import SearchComponent from '@/ui/search'
 import { Loading } from '@/ui/transitions'
 import Scroll from '@/ui/scroll'
@@ -128,26 +131,44 @@ function Search(props: any) {
  * 搜索主要内容
  */
 const SearchContentComponent = ({ dataSuggestList, dataSongsList }: any) => {
-  const { artists } = dataSuggestList;
+  // 相关歌手数据
+  // 设置默认值，如果值为undefined则设置为空数组
+  const { artists = [], playlists = [] } = dataSuggestList;
   return (
-    <Scroll>
+    <Scroll onScroll={forceCheck}>
       <div>
-        <RenderSingers singerList={artists} />
-        {
-          dataSongsList.map((item: any) => (<div key={item.id}>{item.name}</div>))
-        }
+        <ComponentSingerList list={artists} title={`相关歌手`} name={`歌手`} />
+        <ComponentAlbumList list={playlists} title={`相关歌单`} name={`歌单`} />
+        <RenderSongs songsList={dataSongsList} />
       </div>
     </Scroll>
   )
 }
 
-const RenderSingers = ({ singerList }: any) => {
-  if (!singerList.length) return null;
+/**
+ * SearchContentComponent
+ * 歌曲列表
+ * { songsList } { Array | Undefined }
+ */
+const RenderSongs = ({ songsList }: any) => {
+  if (!songsList.length) return null;
   return (
-    <SingerList list={singerList} title={`相关歌手`} />
-  );
+    <SongsList>
+      {
+        songsList.map((item: any) => {
+          return (
+            <li key={item.id}>
+              <dl>
+                <dt>{item.name}</dt>
+                <dd>{getNameString(item.artists)} - {item.name}</dd>
+              </dl>
+            </li>
+          )
+        })
+      }
+    </SongsList>
+  )
 }
-
 
 
 

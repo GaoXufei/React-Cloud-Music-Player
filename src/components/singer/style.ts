@@ -9,7 +9,8 @@ export const SingerList = styled.div`
   box-sizing: border-box;
 
   & .title{
-
+    font-size: ${style["font-size-m"]};
+    padding: 5px 0;
   }
 `;
 
