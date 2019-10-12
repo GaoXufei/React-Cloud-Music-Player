@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { renderRoutes } from 'react-router-config'
 import * as actionsType from './store/actionCreators'
 import { View } from './style'
 import { Left } from '@/ui/transitions'
@@ -12,16 +13,11 @@ import Swiper from '@/components/swiper'
 
 // component
 const Recommend: React.FC = (props: any) => {
-
   const { bannerList, recommendList } = props;
   const { getBannerDataDispatch, getRecommendDataDispatch } = props;
   useEffect(() => {
-    if (!bannerList.size) {
-      getBannerDataDispatch();
-    }
-    if (!recommendList.size) {
-      getRecommendDataDispatch();
-    }
+    if (!bannerList.size) getBannerDataDispatch();
+    if (!recommendList.size) getRecommendDataDispatch();
     // eslint-disable-next-line
   }, [])
 
@@ -29,17 +25,19 @@ const Recommend: React.FC = (props: any) => {
   const recommendListJS = recommendList ? recommendList.toJS() : [];
 
   return (
-    <Left>
-      <View>
-        <Scroll onScroll={forceCheck}>
-          <section>
-            <Swiper bannerList={bannerListJS} />
-            <RecommendList list={recommendListJS} title={`推荐歌单`} />
-          </section>
-        </Scroll>
-      </View>
-    </Left>
-
+    <React.Fragment>
+      <Left>
+        <View>
+          <Scroll onScroll={forceCheck}>
+            <section>
+              <Swiper bannerList={bannerListJS} />
+              <RecommendList props={props} list={recommendListJS} title={`推荐歌单`} />
+            </section>
+          </Scroll>
+        </View>
+      </Left>
+      {renderRoutes(props.route.routes)}
+    </React.Fragment>
   )
 }
 

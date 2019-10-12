@@ -68,7 +68,8 @@ export const ImageWrapper = styled.div`
     z-index: 3;
 
     & i{
-      font-size: 14px;
+      font-size: 13px;
+      margin-right: 2px;
     }
   }
 `;

@@ -5,13 +5,16 @@ import LazyLoad from 'react-lazyload'
 
 export const RecommendList = (props: any) => useMemo(() => {
   const { list, title } = props;
+
+  const enterDetail = (id: any) => props.props.history.push(`/recommend/${id}`);
+
   return (
     <View>
       <Title>{title}</Title>
       <List>
         {
           list.map((item: any) =>
-            (<ListItem key={item.name}>
+            (<ListItem key={item.name} onClick={() => enterDetail(item.id)}>
               <ImageWrapper>
                 <LazyLoad placeholder={<img src={require('@/assets/music.png')} alt="" />}>
                   <img src={item.picUrl} alt="" />

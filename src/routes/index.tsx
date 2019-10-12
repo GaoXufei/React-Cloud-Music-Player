@@ -48,6 +48,15 @@ const Rank = (props: any) => {
   );
 }
 
+const AlbumComponent = lazy(() => import("../views/Album"));
+const Album = (props: any) => {
+  return (
+    <Suspense fallback={null}>
+      <AlbumComponent {...props} />
+    </Suspense>
+  );
+}
+
 export default [
   {
     path: '/',
@@ -60,9 +69,13 @@ export default [
       },
       {
         path: '/recommend',
-        exact: true,
-        key: 'home',
-        component: Recommend
+        component: Recommend,
+        routes: [
+          {
+            path: '/recommend/:id',
+            component: Album
+          }
+        ]
       },
       {
         path: '/singers',

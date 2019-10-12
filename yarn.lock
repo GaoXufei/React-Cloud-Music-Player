@@ -2868,6 +2868,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+create-react-context@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.taobao.org/create-react-context/download/create-react-context-0.3.0.tgz#546dede9dc422def0d3fc2fe03afe0bc0f4f7d8c"
+  integrity sha1-VG3t6dxCLe8NP8L+A6/gvA9PfYw=
+  dependencies:
+    gud "^1.0.0"
+    warning "^4.0.3"
+
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
   resolved "https://registry.npm.taobao.org/cross-spawn/download/cross-spawn-6.0.5.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcross-spawn%2Fdownload%2Fcross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
@@ -8130,6 +8138,15 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-activation@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npm.taobao.org/react-activation/download/react-activation-0.2.0.tgz#c8022b6ae69f3c2363704d52bbdb6ed6b4fdea05"
+  integrity sha1-yAIrauafPCNjcE1Su9tu1rT96gU=
+  dependencies:
+    create-react-context "^0.3.0"
+    hoist-non-react-statics "^3.3.0"
+    jsx-ast-utils "^2.2.1"
+
 react-app-polyfill@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/react-app-polyfill/download/react-app-polyfill-1.0.2.tgz#2a51175885c88245a2a356dc46df29f38ec9f060"
@@ -9922,6 +9939,13 @@ walker@^1.0.7, walker@~1.0.5:
   integrity sha1-L3+bj9ENZ3JisYqITijRlhjgKPs=
   dependencies:
     makeerror "1.0.x"
+
+warning@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.npm.taobao.org/warning/download/warning-4.0.3.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwarning%2Fdownload%2Fwarning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
+  integrity sha1-Fungd+uKhtavfWSqHgX9hbRnjKM=
+  dependencies:
+    loose-envify "^1.0.0"
 
 watchpack@^1.6.0:
   version "1.6.0"
