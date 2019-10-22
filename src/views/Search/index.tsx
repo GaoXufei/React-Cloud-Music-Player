@@ -58,9 +58,12 @@ function Search(props: any) {
     setShow(true);
     // 如果size为0时 请求热门搜索数据
     (!hotList.size) && getHotKeyWordsDispatch();
-    // 如果size大于0时 将热门搜索数据写入useState
-    (hotList.size) && DATA_SET_HOT_LIST(hotList.toJS())
     // eslint-disable-next-line
+  }, [hotList])
+
+  useEffect(() => {
+    // 如果size大于0时 将热门搜索数据写入useState
+    hotList.size && DATA_SET_HOT_LIST(hotList.toJS())
   }, [hotList])
 
   useEffect(() => {

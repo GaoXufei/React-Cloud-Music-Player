@@ -1,10 +1,12 @@
-import React, { useState, useRef, forwardRef } from 'react'
+import React, { useState, useRef, forwardRef, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { View, Header } from './style'
 import { TransitionWrapper } from '@/ui/transitions'
 import { connect } from 'react-redux'
 import * as actionCreators from './store/actionCreators'
 
+// components
+import AlbumDetail from '@/components/albumDetail'
 
 const Album: React.FC = (props: any) => {
   // 获取页面传递过来的id
@@ -15,13 +17,40 @@ const Album: React.FC = (props: any) => {
   const [title, setTitle] = useState<string>('歌单');
   // 获取header element
   const headerElement = useRef<HTMLHeadElement>(null);
+  // 获取Dispatch
+  const { getAlbumDataDispatch } = props;
+  // 获取State
+  const { currentAlbum } = props;
+  // DATA
+  const [DATA_CURRENT_ALBUM, SET_DATA_CURRENT_ALBUM] = useState<any | null>({})
+
   // handle 当前页面显示/隐藏函数
   const handleBack = () => setShow(false);
+
+  // 初始化数据
+  useEffect(() => {
+    SET_DATA_CURRENT_ALBUM({})
+    currentAlbum.clear();
+    // eslint-disable-next-line
+  }, [])
+
+  // 网络请求
+  useEffect(() => {
+    getAlbumDataDispatch(id);
+  }, [getAlbumDataDispatch, id])
+
+  // useState 数据
+  useEffect(() => {
+    currentAlbum.size && SET_DATA_CURRENT_ALBUM(currentAlbum.toJS());
+  }, [currentAlbum])
+
   return (
     <TransitionWrapper show={show} props={props}>
       <View>
         <ComponentHeader ref={headerElement} handleClick={handleBack} title={title} />
         {id}
+        {DATA_CURRENT_ALBUM.name}
+        <AlbumDetail />
       </View>
     </TransitionWrapper>
   )
@@ -49,9 +78,9 @@ const mapStateToProps = (state: any) => ({
 // 映射dispatch到props
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getAlbumDataDispatch: (id: number, fromURL: string) => {
+    getAlbumDataDispatch: (id: number) => {
       dispatch(actionCreators.changeEnterLoading(true));
-      dispatch(actionCreators.getAlbumList(id, fromURL));
+      dispatch(actionCreators.getAlbumList(id));
     },
     changePullUpLoadingStateDispatch: (state: any) => dispatch(actionCreators.changePullUpLoading(state)),
     changeScrollYDispatch: (y: any) => dispatch(actionCreators.changeScrollY(y))

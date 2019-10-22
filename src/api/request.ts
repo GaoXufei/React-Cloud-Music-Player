@@ -11,5 +11,3 @@ export const getSuggestListRequest = (query: string) => axiosInstance.get(`/sear
 export const getResultSongsListRequest = (query: string) => axiosInstance.get(`/search?keywords=${query}`);
 // GET 获取详情列表 { id -> 详情id }
 export const getRecommendDetailRequest = (id: number) => axiosInstance.get(`/playlist/detail?id=${id}`);
-// GET 获取详情列表 { id -> 详情id }
-export const getRankDetailRequest = (id: number) => axiosInstance.get(`/playlist/detail?id=${id}`);
