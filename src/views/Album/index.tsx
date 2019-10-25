@@ -1,7 +1,10 @@
-import React, { useState, useRef, forwardRef, useEffect } from 'react'
+import React, { useState, useRef, forwardRef, useEffect, useCallback } from 'react'
 import { withRouter } from 'react-router-dom'
 import { View, Header } from './style'
 import { TransitionWrapper } from '@/ui/transitions'
+import { Loading } from '@/ui/transitions'
+import Scroll from '@/ui/scroll'
+import { isEmptyObject } from '@/utils'
 import { connect } from 'react-redux'
 import * as actionCreators from './store/actionCreators'
 
@@ -18,14 +21,25 @@ const Album: React.FC = (props: any) => {
   // 获取header element
   const headerElement = useRef<HTMLHeadElement>(null);
   // 获取Dispatch
-  const { getAlbumDataDispatch } = props;
+  const { getAlbumDataDispatch, changePullUpLoadingStateDispatch } = props;
   // 获取State
-  const { currentAlbum } = props;
+  const { currentAlbum, enterLoading, pullUpLoading, songsCount } = props;
   // DATA
   const [DATA_CURRENT_ALBUM, SET_DATA_CURRENT_ALBUM] = useState<any | null>({})
 
   // handle 当前页面显示/隐藏函数
-  const handleBack = () => setShow(false);
+  const handleBack = useCallback(() => setShow(false), [])
+
+  // handle 页面滚动
+  const handleScroll = () => {
+
+  }
+
+  // handle 
+  const handlePullUp = () => {
+    changePullUpLoadingStateDispatch(true);
+    changePullUpLoadingStateDispatch(false);
+  }
 
   // 初始化数据
   useEffect(() => {
@@ -47,10 +61,25 @@ const Album: React.FC = (props: any) => {
   return (
     <TransitionWrapper show={show} props={props}>
       <View>
+        {/* header */}
         <ComponentHeader ref={headerElement} handleClick={handleBack} title={title} />
-        {id}
-        {DATA_CURRENT_ALBUM.name}
-        <AlbumDetail />
+        {/* album-detail */}
+        {
+          !isEmptyObject(DATA_CURRENT_ALBUM)
+          &&
+          (
+            <Scroll
+              onScroll={handleScroll}
+              pullUp={handlePullUp}
+              pullUpLoading={pullUpLoading}
+              bounceTop={false}
+            >
+              <AlbumDetail currentAlbum={DATA_CURRENT_ALBUM} pullUpLoading={pullUpLoading} />
+            </Scroll>
+          )
+        }
+        {/* loading */}
+        {enterLoading ? <Loading /> : null}
       </View>
     </TransitionWrapper>
   )

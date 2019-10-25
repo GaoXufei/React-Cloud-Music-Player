@@ -44,7 +44,7 @@ export const ImageWrapper = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.0) 100%);;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.0) 100%);
     z-index: 2;
   }
 
