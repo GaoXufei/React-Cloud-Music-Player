@@ -8,10 +8,11 @@ import {
   MenuItem
 } from './style'
 import { digitalAbbreviation } from '@/utils'
+import SongsList from '@/components/songList'
 
 const albumDetail = ({ currentAlbum }: any) => {
   return (
-    <React.Fragment>
+    <div>
       <TopComponent
         coverImage={currentAlbum.coverImgUrl}
         subscribedCount={currentAlbum.subscribedCount}
@@ -20,13 +21,12 @@ const albumDetail = ({ currentAlbum }: any) => {
         name={currentAlbum.name}
       />
       <MenuComponent />
-    </React.Fragment>
+      <SongsList songs={currentAlbum.tracks} />
+    </div>
   );
 }
 
-const TopComponent: React.FC = ({ coverImage, subscribedCount, avatarUrl, nickName, name }: any) => {
-  console.log();
-  return null;
+const TopComponent = ({ coverImage, subscribedCount, avatarUrl, nickName, name }: any) => {
   return (
     <Top background={coverImage}>
       <div className="background">

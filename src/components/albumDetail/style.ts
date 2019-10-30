@@ -123,6 +123,7 @@ export const DescriptionAuthor = styled.div`
 export const Menu = styled.ul`
   width: 100%;
   margin-top: -55px;
+  margin-bottom: 20px;
   padding: 0 20px;
   box-sizing: border-box;
   display: flex;
@@ -143,6 +144,7 @@ export const MenuItem = styled.li`
   }
 
   & span{
+    margin-top: 2px;
     font-size: 12px;
   }
 `;

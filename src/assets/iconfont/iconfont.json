@@ -20,6 +20,13 @@
       "unicode_decimal": 58947
     },
     {
+      "icon_id": "1281456",
+      "name": "Add to",
+      "font_class": "62tianjia",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "1333637",
       "name": "取消",
       "font_class": "quxiao",
@@ -67,6 +74,13 @@
       "font_class": "dianzan",
       "unicode": "e616",
       "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "10043887",
+      "name": "Player",
+      "font_class": "Player",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
     },
     {
       "icon_id": "10809845",

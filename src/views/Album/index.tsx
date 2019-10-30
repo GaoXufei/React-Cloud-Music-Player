@@ -31,8 +31,8 @@ const Album: React.FC = (props: any) => {
   const handleBack = useCallback(() => setShow(false), [])
 
   // handle 页面滚动
-  const handleScroll = () => {
-
+  const handleScroll = ({ x, y }: any) => {
+    console.log(Math.abs(y));
   }
 
   // handle 
