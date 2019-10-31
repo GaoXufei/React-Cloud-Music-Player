@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  View,
-  CollectionAndAllPlayer
-} from './style'
+import { View, CollectionAndAllPlayer } from './style'
 import { Collection } from './style'
 import { AllPlayer } from './style'
 import { List, Item } from './style'
@@ -58,7 +55,7 @@ const ListComponent = ({ list }: any) => {
     <List>
       {
         list.map((item: any, index: number) => (
-          <Item key={item.name}>
+          <Item key={item.id}>
             <i>{index + 1}</i>
             <div>
               <p>{item.name}</p>
