@@ -11,3 +11,7 @@ export const getSuggestListRequest = (query: string) => axiosInstance.get(`/sear
 export const getResultSongsListRequest = (query: string) => axiosInstance.get(`/search?keywords=${query}`);
 // GET 获取详情列表 { id -> 详情id }
 export const getRecommendDetailRequest = (id: number) => axiosInstance.get(`/playlist/detail?id=${id}`);
+// GET 获取歌手列表 singer
+export const getSingerListRequest = (category: any, alpha: any, count: any) => axiosInstance.get(`/artist/list?cat=${category}&initial=${alpha.toLowerCase()}&offset=${count}`);
+// GET 获取热门歌手列表 singers
+export const getHotSingerListRequest = (count: any) => axiosInstance.get(`/top/artists?offset=${count}`);
