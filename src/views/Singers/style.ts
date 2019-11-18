@@ -37,16 +37,7 @@ export const Nav = styled.div`
 
 export const Main = styled.div`
   flex: 1;
-  position: relative;
-
-  & > div{
-    position: fixed;
-    top: 152px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-  }
+  height: 60px;
 `;
 
 export const SingerList = styled.div`
@@ -61,10 +52,21 @@ export const SingerItem = styled.div`
   align-items: center;
 
   .img-wrapper{
+    border-radius: 5px;
+    overflow: hidden;
+
     & img{
       width: 50px;
       height: 50px;
+      display: block;
     }
+  }
+
+  .img-wrapper + p{
+    font-size: ${style["font-size-m"]};
+    padding-left: 20px;
+    box-sizing: border-box;
+    color: ${style["font-color"]};
   }
 `;
 

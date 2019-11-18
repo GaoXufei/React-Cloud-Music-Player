@@ -5,7 +5,10 @@ const defaultState = fromJS({
   category: "",
   alpha: "",
   singerList: [],
-  listOffset: 0
+  listOffset: 0,
+  enterLoading: true,
+  pullUpLoading: false,
+  pullDownLoading: false
 })
 
 export default (state = defaultState, action: any) => {
@@ -18,6 +21,12 @@ export default (state = defaultState, action: any) => {
       return state.set('listOffset', action.data);
     case actionTypes.CHANGE_SINGER_LIST:
       return state.set('singerList', action.data);
+    case actionTypes.CHANGE_ENTER_LOADING:
+      return state.set('enterLoading', action.data);
+    case actionTypes.CHANGE_PULLUP_LOADING:
+      return state.set('pullUpLoading', action.data);
+    case actionTypes.CHANGE_PULLDOWN_LOADING:
+      return state.set('pullDownLoading', action.data);
     default:
       return state;
   }
