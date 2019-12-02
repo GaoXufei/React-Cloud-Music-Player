@@ -1,6 +1,9 @@
 import React, { forwardRef, useRef, useState, useEffect, useMemo, useImperativeHandle } from 'react'
 import BScroll from 'better-scroll'
-import { ScrollContainer, /*PullDownLoading, PullUpLoading*/ } from './style'
+import { ScrollContainer, PullDownLoadingStyle } from './style'
+import {
+  PullUpLoadingStyle
+} from './style'
 import { debounce } from '@/utils'
 
 interface InterfaceProps {
@@ -13,7 +16,7 @@ interface InterfaceProps {
   pullUp?: (() => void) | null,
   pullDown?: (() => void) | null,
   bounceTop?: boolean,
-  bounceBottom?: boolean
+  bounceBottom?: boolean,
   children?: any
 }
 
@@ -23,7 +26,7 @@ const Scroll = forwardRef((props: any, ref: any) => {
 
   const scrollContainerRef: any = useRef();
 
-  const { direction, click, refresh, /*pullDownLoading, pullUpLoading,*/ bounceBottom, bounceTop } = props;
+  const { direction, click, refresh, pullDownLoading, pullUpLoading, bounceBottom, bounceTop } = props;
 
   const { pullDown, pullUp, onScroll } = props;
 
@@ -39,6 +42,10 @@ const Scroll = forwardRef((props: any, ref: any) => {
       bounce: {
         top: bounceTop,
         bottom: bounceBottom
+      },
+      pullDownRefresh: {
+        threshold: 50,
+        stop: 20
       }
     });
 
@@ -72,6 +79,9 @@ const Scroll = forwardRef((props: any, ref: any) => {
         pullDownDebounce();
       }
     });
+    bScroll.on('scroll', (pos: any) => {
+
+    })
     return () => {
       bScroll.off('touchEnd');
     }
@@ -99,10 +109,38 @@ const Scroll = forwardRef((props: any, ref: any) => {
 
   return (
     <ScrollContainer ref={scrollContainerRef}>
-      {props.children}
+      <div>
+        {pullDownLoading ? <PullUpLoadingComponent /> : null}
+        {props.children}
+        {!pullUpLoading ? <PullDownLoadingComponent /> : null}
+      </div>
     </ScrollContainer>
   )
 })
+
+const PullUpLoadingComponent = () => {
+  return (
+    <PullUpLoadingStyle>
+      <div className="wrapper">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+        <div className="item5"></div>
+      </div>
+    </PullUpLoadingStyle>
+  );
+}
+
+const PullDownLoadingComponent = () => {
+  return (
+    <PullDownLoadingStyle>
+      <div className="wrapper">
+        <div className="circle" />
+      </div>
+    </PullDownLoadingStyle>
+  );
+}
 
 
 
@@ -116,7 +154,8 @@ Scroll.defaultProps = {
   pullUp: null,
   pullDown: null,
   bounceTop: true,
-  bounceBottom: true
+  bounceBottom: true,
+  isLoading: false
 };
 
 export default Scroll;

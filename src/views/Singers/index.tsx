@@ -12,6 +12,10 @@ import {
   changeAlpha,
   changeListOffset,
   changeEnterLoading,
+  changePullUpLoading,
+  changePullDownLoading,
+  refreshMoreHotSingerList,
+  refreshMoreSingerList
 } from './store/actionCreators'
 import { connect } from 'react-redux'
 import { Loading } from '@/ui/transitions'
@@ -20,8 +24,8 @@ import { Loading } from '@/ui/transitions'
  */
 const Singers = (props: any) => {
   const scrollRef: any = useRef(null);
-  const { singerList, category, alpha, enterLoading }: any = props;
-  const { getHotSinger, updateCategroy, updateAlpha }: any = props;
+  const { singerList, category, alpha, enterLoading, pullUpLoading, pullDownLoading }: any = props;
+  const { getHotSinger, updateCategroy, updateAlpha, pullUpRefresh, pullDownRefresh }: any = props;
 
   useEffect(() => {
     if (!singerList.size && !category && !alpha) getHotSinger();
@@ -31,19 +35,17 @@ const Singers = (props: any) => {
   // 接收选中的参数
   const handleCategroyClick = (item: any) => {
     updateCategroy(item.key);
-    scrollRef.current.refresh()
   }
   const handleAlphaClick = (item: any) => {
     updateAlpha(item.key)
-    scrollRef.current.refresh()
   }
   // 上滑加载更多
   const handlePullUp = () => {
-    console.log(scrollRef.current);
+    pullUpRefresh(category === "")
   }
   // 下拉加载
   const handlePullDown = () => {
-    scrollRef.current.refresh()
+    pullDownRefresh()
   }
 
   return (
@@ -59,6 +61,8 @@ const Singers = (props: any) => {
             onScroll={forceCheck}
             pullUp={handlePullUp}
             pullDown={handlePullDown}
+            pullUpLoading={pullUpLoading}
+            pullDownLoading={pullDownLoading}
           >
             <RenderSingerList list={singerList.toJS()} />
           </Scroll>
@@ -74,8 +78,8 @@ const RenderSingerList = ({ list }: any) => {
     <SingerList>
       {
         list.map(
-          (item: any) => (
-            <SingerItem key={item.id}>
+          (item: any, index: number) => (
+            <SingerItem key={`${item.accountId}${index}`}>
               <div className="img-wrapper">
                 <LazyLoad placeholder={<img src={require('@/assets/icon_user.png')} alt={"singer"} />}>
                   <img src={`${item.picUrl}?param=300x300`} alt={"singer"} />
@@ -95,7 +99,9 @@ const mapStateToProps = (state: any) => ({
   listOffset: state.getIn(['singers', 'listOffset']),
   singerList: state.getIn(['singers', 'singerList']),
   enterLoading: state.getIn(['singers', 'enterLoading']),
-  pageCount: state.getIn(['singers', 'pageCount'])
+  pageCount: state.getIn(['singers', 'pageCount']),
+  pullUpLoading: state.getIn(['singers', 'pullUpLoading']),
+  pullDownLoading: state.getIn(['singers', 'pullDownLoading'])
 })
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -112,6 +118,17 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(changeListOffset(0));
       dispatch(changeEnterLoading(true));
       dispatch(getSingersList());
+    },
+    // 上滑加载更多
+    pullUpRefresh: (hot: any) => {
+      dispatch(changePullUpLoading(true));
+      hot ? dispatch(refreshMoreHotSingerList()) : dispatch(refreshMoreSingerList());
+    },
+    // 下拉加载
+    pullDownRefresh: (category: string, alpha: string) => {
+      dispatch(changePullDownLoading(true))
+      dispatch(changeListOffset(0));
+      (category === "" && alpha === "") ? dispatch(getHotSingersList()) : dispatch(getSingersList());
     }
   }
 }

@@ -55,26 +55,80 @@ export const changePullDownLoading = (data: any) => ({
 // function -> 获取歌手列表 { 筛选 }
 export const getSingersList = () => {
   return async (dispatch: any, getState: any) => {
-    const offset = getState().getIn(['singers', 'listOffset']);
-    const category = getState().getIn(['singers', 'category']);
-    const alpha = getState().getIn(['singers', 'alpha']);
-    const { artists }: any = await getSingerListRequest(category, alpha, offset);
-    dispatch(changeSingerList(artists))
-    dispatch(changeEnterLoading(false));
-    dispatch(changePullDownLoading(false));
-    dispatch(changeListOffset(artists.length));
+    try {
+      const offset = getState().getIn(['singers', 'listOffset']);
+      const category = getState().getIn(['singers', 'category']);
+      const alpha = getState().getIn(['singers', 'alpha']);
+      const { artists }: any = await getSingerListRequest(category, alpha, offset);
+      dispatch(changeSingerList(artists))
+      dispatch(changeEnterLoading(false));
+      dispatch(changePullDownLoading(false));
+      dispatch(changeListOffset(artists.length));
+    } catch (e) {
+      console.log(
+        `**歌手数据错误**`,
+        e
+      );
+    }
   }
 }
 
 // function -> 获取热门歌手列表
 export const getHotSingersList = () => {
   return async (dispatch: any) => {
-    const { artists }: any = await getHotSingerListRequest(0);
-    dispatch(changeSingerList(artists));
-    dispatch(changeListOffset(artists.length));
-    dispatch(changeEnterLoading(false));
-    dispatch(changePullDownLoading(false));
+    try {
+      const { artists }: any = await getHotSingerListRequest(0);
+      dispatch(changeSingerList(artists));
+      dispatch(changeListOffset(artists.length));
+      dispatch(changeEnterLoading(false));
+      dispatch(changePullDownLoading(false));
+    } catch (e) {
+      console.log(
+        `**热门歌手数据错误**`,
+        e
+      );
+    }
   }
 };
 
-// function -> 关键字查找
+// function -> 刷新多更(热门)
+export const refreshMoreHotSingerList = () => {
+  return async (dispatch: any, getState: any) => {
+    try {
+      const offset = getState().getIn(['singers', 'listOffset']);
+      const singerList = getState().getIn(['singers', 'singerList']).toJS();
+      const { artists }: any = await getHotSingerListRequest(offset);
+      const data = [...singerList, ...artists];
+      dispatch(changeSingerList(data));
+      dispatch(changePullUpLoading(false));
+      dispatch(changeListOffset(data.length));
+    } catch (e) {
+      console.log(
+        `**下拉更多数据（热门）错误**`,
+        e
+      );
+    }
+  }
+}
+
+// function -> 刷新更多
+export const refreshMoreSingerList = () => {
+  return async (dispatch: any, getState: any) => {
+    try {
+      const category = getState().getIn(['singers', 'category']);
+      const alpha = getState().getIn(['singers', 'alpha']);
+      const offset = getState().getIn(['singers', 'listOffset']);
+      const singerList = getState().getIn(['singers', 'singerList']).toJS();
+      const { artists }: any = await getSingerListRequest(category, alpha, offset);
+      const data = [...singerList, ...artists];
+      dispatch(changeSingerList(data));
+      dispatch(changePullUpLoading(false));
+      dispatch(changeListOffset(data.length));
+    } catch (e) {
+      console.log(
+        `**下拉更多数据错误**`,
+        e
+      );
+    }
+  }
+}
